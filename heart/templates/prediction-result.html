@@ -1,0 +1,134 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+.thc {
+	text-align: left;
+    background-color: rgb(160,129,46);
+    color: #FFFFFF;
+    font-size: 21px;
+    padding: 10px;
+}
+.thce {
+    text-align: center;
+    background-color: #bb2424;
+    color: #FFFFFF;
+    font-size: 15px;
+	width: 50%;
+}
+td {
+	text-align: center;
+	font-weight: bold;
+}
+</style>
+<!--breadcrumbs start-->
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="">
+				<h1><center>Prediction of Heart Disease</center></h1>
+			</div>
+		</div>
+	</div>
+</div>
+<!--breadcrumbs end-->
+
+<!--container start-->
+<div class="registration-bg">
+	<div class="row">
+			<form enctype="multipart/form-data" method="post" class="form-signin wow fadeInUp" action="" style="max-width:60%">
+				<div class="login-wrap">
+					<table style="width: 100%;">
+						<tr>
+							<th colspan="2" class="thc">Prediction Result</th>
+						</tr>
+						<tr>
+							<td colspan="2">
+								{% if prediction == 1 %}	
+								 <div style="font-size: 19px;
+								 padding: 10px;
+								 color: #ff0000;">Sorry,You are suffered from heart Disease. </div>
+								{% endif %}
+
+								{% if prediction == 0 %}	
+								<div style="font-size: 20px;
+								padding: 19px;
+								color: #046319;text-align: right;">
+								 Congratulation! You are not suffered from heart Disease. 
+								 </div>
+								{% endif %}
+
+							</tdcolspan="2">
+						</tr>
+						<tr>
+							<center>
+								<td style="width:40%; text-align: right;"><img src="/assets/img/heart1.png" style="height: 400px;"></td>
+							</center>
+							<td style="width: 60%;">
+								
+								<table border="1">
+									
+									<tr>
+										<th class="thce">Label </th>
+										<th class="thce">Value</th class="thc">
+									</tr>
+									<tr>
+										<td>Age</td>
+										<td>{{form_data.0}}</td>
+									</tr>
+									<tr>
+										<td>Gender</td>
+										<td>{{form_data.1}}</td>
+									</tr>
+									<tr>
+										<td>Chest Pain Type</td>
+										<td>{{form_data.2}}</td>
+									</tr>
+									<tr>
+										<td>Resting Blood Pressure</td>
+										<td>{{form_data.3}}</td>
+									</tr>
+									<tr>
+										<td>Serum Cholestoral in mg/dl</td>
+										<td>{{form_data.4}}</td>
+									</tr>
+									<tr>
+										<td>Fasting blood sugar</td>
+										<td>{{form_data.5}}</td>
+									</tr>
+									<tr>
+										<td>Resting electrocardiographic results</td>
+										<td>{{form_data.6}}</td>
+									</tr>
+									<tr>
+										<td>Maximum heart rate achieved</td>
+										<td>{{form_data.7}}</td>
+									</tr>
+									<tr>
+										<td>Exercise induced angina</td>
+										<td>{{form_data.8}}</td>
+									</tr>
+									<tr>
+										<td>Oldpeak </td>
+										<td>{{form_data.9}}</td>
+									</tr>
+									<tr>
+										<td>Peak exercise ST segment</td>
+										<td>{{form_data.10}}</td>
+									</tr>
+									<tr>
+										<td>Number of major vessels</td>
+										<td>{{form_data.11}}</td>
+									</tr>
+									<tr>
+										<td>Thal</td>
+										<td>{{form_data.12}}</td>
+									</tr>
+								</table>
+							</td>
+							
+						</tr>
+					</table>
+				</div>
+			</form>
+	</div>
+</div>
+{% endblock content %}

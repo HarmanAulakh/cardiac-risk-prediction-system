@@ -1,0 +1,223 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+
+</style>
+<!--breadcrumbs start-->
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-sm-12">
+				<h1>Prediction of {{fileDetails.files_name}}</h1>
+			</div>
+		</div>
+	</div>
+</div>
+<!--breadcrumbs end-->
+<!--container start-->
+<div class="container">
+	<div class="row">
+		<!-- Historial Data Graph-->
+		<div style="border:1px solid #CCCCCC; padding:10px; margin-bottom: 10px">
+			<h3 style="color:#c018b8">Historical Data of {{fileDetails.files_name}} - Line Chart</h3>
+			<canvas id="historicalGraph" width="400px" height="400px"></canvas>
+		</div>	
+		
+		<!-- Cumulative Returns Data Graph-->
+		<div style="border:1px solid #CCCCCC; padding:10px; margin-bottom: 10px">
+			<h3 style="color:#c018b8">Cumulative Returns Data of {{fileDetails.files_name}} - Line Chart</h3>
+			<canvas id="cumulativeGraph" width="400px" height="400px"></canvas>
+		</div>	
+	
+		<!-- Testing and Training Data Graph-->
+		<div style="border:1px solid #CCCCCC; padding:10px; margin-bottom: 10px">
+			<h3 style="color:#c018b8">Training and Testing Data of {{fileDetails.files_name}} - Line Chart</h3>
+			<canvas id="testingTrainingGraph" width="400px" height="400px"></canvas>
+		</div>	
+
+		<!-- Testing and Training Data Graph-->
+		<div style="border:1px solid #CCCCCC; padding:10px; margin-bottom: 10px">
+			<h3 style="color:#c018b8">Prediction Data of {{fileDetails.files_name}} - Line Chart</h3>
+			<canvas id="predictionGraph" width="400px" height="400px"></canvas>
+		</div>
+
+		<!-- Testing and Training Data Graph-->
+		<div style="border:1px solid #CCCCCC; padding:10px; margin-bottom: 10px">
+			<h3 style="color:#c018b8">Prediction Vs Expectations of {{fileDetails.files_name}} - Line Chart</h3>
+			<canvas id="predictionExpectationGraph" width="400px" height="400px"></canvas>
+		</div>
+
+		<script>
+		var options = {
+			responsive: true,
+			title: {
+				display: true,
+				text: 'Line Chart'
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				xAxes: [{
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: 'Month'
+					}
+				}],
+				yAxes: [{
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: 'Value'
+					}
+				}]
+			}
+		};
+
+		// Historical Data Graph //
+		var historicalData = {
+			type: 'line',
+			data: {
+				labels: {{ current_label|safe}},
+				datasets: [{
+					label: 'Heart Price History',
+					fill: false,
+					backgroundColor: "#FF0000",
+					borderColor: "#FF0000",
+					data: {{current_data}},
+				}, ]
+			},
+			options: options
+		};
+
+		// Testing and Training Data Graph //
+		var trainingData = {
+			type: 'line',
+			data: {
+				labels: {{ current_label|safe}},
+				datasets: [{
+					label: 'Training Dataset',
+					fill: false,
+					backgroundColor: "#FF0000",
+					borderColor: "#FF0000",
+					data: {{train_data}},
+				}, {
+					label: 'Testing Dataset',
+					fill: false,
+					backgroundColor: "#468847",
+					borderColor: "#468847",
+					data: {{current_data}},
+				} ]
+			},
+			options: options
+		};
+
+		// Prediction Data Graph //
+		var predictionData = {
+			type: 'line',
+			data: {
+				labels: {{ current_label|safe}},
+				datasets: [{
+					label: 'Training Dataset',
+					fill: false,
+					backgroundColor: "#FF0000",
+					borderColor: "#FF0000",
+					data: {{train_data}},
+				}, {
+					label: 'Testing Dataset',
+					fill: false,
+					backgroundColor: "#468847",
+					borderColor: "#468847",
+					data: {{current_data}},
+				},
+				{
+					label: 'Prediction Dataset',
+					fill: false,
+					backgroundColor: "#FF00FF",
+					borderColor: "#FF00FF",
+					data: {{prediction}},
+				} ]
+			},
+			options: options
+		};
+
+		// Prediction vs Expectations //
+		var predictionExpectationData = {
+			type: 'line',
+			data: {
+				labels: {{ test_data_label|safe}},
+				datasets: [ {
+					label: 'Testing Dataset',
+					fill: false,
+					backgroundColor: "#468847",
+					borderColor: "#468847",
+					data: {{test_data}},
+				},
+				{
+					label: 'Prediction Dataset',
+					fill: false,
+					backgroundColor: "#FF00FF",
+					borderColor: "#FF00FF",
+					data: {{prediction_data}},
+				} ]
+			},
+			options: options
+		};
+
+
+		// Cumulative Returns Graph
+		var cumulativeReturns = {
+			type: 'line',
+			data: {
+				labels: {{ current_label|safe}},
+				datasets: [{
+					label: 'Heart Price History',
+					fill: false,
+					backgroundColor: "#468847",
+					borderColor: "#468847",
+					data: {{cumulative_returns}},
+				}, ]
+			},
+			options: options
+		};
+
+		// Historical Line Chart //
+		var historicalLineChart = document.getElementById("historicalGraph");
+		historicalLineChart.height = 130;
+		historicalLineChart.width = 300;
+		var singleLine = new Chart(historicalLineChart, historicalData);
+
+		// Cumulative Return Graph Line Chart //
+		var cumulativeLineChart = document.getElementById("cumulativeGraph");
+		cumulativeLineChart.height = 130;
+		cumulativeLineChart.width = 300;
+		var cumulativeLineChart = new Chart(cumulativeLineChart, cumulativeReturns);
+
+		// Testing and Training Graph Line Chart //
+		var testingTrainingChart = document.getElementById("testingTrainingGraph");
+		testingTrainingChart.height = 130;
+		testingTrainingChart.width = 300;
+		var trainingDataChart = new Chart(testingTrainingChart, trainingData);
+
+		// Prediction Data Graph Line Chart //
+		var predictionDataChart = document.getElementById("predictionGraph");
+		predictionDataChart.height = 130;
+		predictionDataChart.width = 300;
+		var predictionChart = new Chart(predictionDataChart, predictionData);
+
+		// Prediction Data Graph Line Chart //
+		var predictionExpectionsDataChart = document.getElementById("predictionExpectationGraph");
+		predictionExpectionsDataChart.height = 130;
+		predictionExpectionsDataChart.width = 300;
+		var predictionChart = new Chart(predictionExpectionsDataChart, predictionExpectationData);
+		
+		</script>
+	</div>
+</div>
+<!--container end-->
+{% endblock content %}

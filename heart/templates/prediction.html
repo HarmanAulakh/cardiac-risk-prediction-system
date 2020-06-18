@@ -1,0 +1,132 @@
+{% extends 'base.html' %} {% block content %}
+<script>
+	jQuery(function () {
+		jQuery("#files_start_date").datepicker({
+			changeMonth: true,
+			changeYear: true,
+			yearRange: "0:+1",
+			dateFormat: 'd MM,yy'
+		});
+		jQuery("#files_end_date").datepicker({
+			changeMonth: true,
+			changeYear: true,
+			yearRange: "0:+1",
+			dateFormat: 'd MM,yy'
+		});
+	});
+</script>
+<!--breadcrumbs start-->
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-sm-4">
+				<h1><center>Prediction</center></h1>
+			</div>
+		</div>
+	</div>
+</div>
+<!--breadcrumbs end-->
+
+<!--container start-->
+<div class="registration-bg">
+	<div class="row">
+		<form enctype="multipart/form-data" method="post" class="form-signin wow fadeInUp" action="" style="max-width:60%">
+			{% csrf_token %}
+			<h2 class="form-signin-heading">
+				Check, If you are suffering from Heart Disease
+			</h2>
+			{% if messages %}
+				<div class="alert alert-success fade in" style="margin:10px;">
+					{% for message in messages %}
+						<strong>{{ message }}</strong>
+					{% endfor %}
+				</div>
+			{% endif %}
+			<div class="login-wrap">
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Age</label>
+					<input type="text" name="age" id="age" class="form-control" placeholder="Enter your age" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Gender</label>
+					<select name="gender" required class="form-control" placeholder="Select User" autofocus=""> 
+						<option value="">Please Select</option>
+						<option value="1">Male</option>
+						<option value="0">Female</option>
+					</select>
+				</div>
+				<div style="clear: both"></div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Chest Pain Type</label>
+					<select name="chest_pain_type" required class="form-control" placeholder="Select User" autofocus=""> 
+						<option value="">Please Select</option>
+						<option value="1">Typical Angina</option>
+						<option value="2">Atypical Angina</option>
+						<option value="3">Non-Anginal pain</option>
+						<option value="4">Asymptomatic</option>
+					</select>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Resting Blood Pressure</label>
+					<input type="text" name="bp" id="bp" class="form-control" placeholder="Resting Blood Pressure" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Serum Cholestoral in mg/dl</label>
+					<input type="text" name="sc" id="sc" class="form-control" placeholder="Serum Cholestoral in mg/dl" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Fasting Blood Sugar</label>
+					<input type="text" name="sugar" id="sugar" class="form-control" placeholder="Fasting Blood Sugar" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Resting Electrocardiographic Results (values 0,1,2)</label>
+					<input type="text" name="resting" id="resting" class="form-control" placeholder="Resting Electrocardiographic Results (values 0,1,2)" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Maximum Heart Rate Achieved</label>
+					<input type="text" name="hra" id="hra" class="form-control" placeholder="Maximum Heart Rate Achieved" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Exercise Induced Angina</label>
+					<input type="text" name="eia" id="eia" class="form-control" placeholder="Exercise Induced Angina" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Oldpeak = ST depression induced by exercise relative to rest</label>
+					<input type="text" name="depression" id="depression" class="form-control" placeholder="Oldpeak = ST depression induced by exercise relative to rest" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">The slope of the peak exercise ST segment</label>
+					<input type="text" name="st" id="st" class="form-control" placeholder="The slope of the peak exercise ST segment" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Number of major vessels (0-3) colored by flourosopy</label>
+					<input type="text" name="vessels" id="vessels" class="form-control" placeholder="Number of major vessels (0-3) colored by flourosopy" required>
+				</div>
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Thal</label>
+					<select name="thal" required class="form-control" placeholder="Select User" autofocus="" /> 
+						<option value="">Please Select</option>
+						<option value="1">Normal</option>
+						<option value="2">Fixed Defect</option>
+						<option value="3">Reversable Defect</option>
+					</select>
+				</div>				
+				<button class="btn btn-lg btn-login btn-block" type="submit">Check and Show Result</button>
+			</div>
+			<input type="hidden" name="act" value="save_files">
+			<input type="hidden" name="user_id" value="{{fileslist.files_id}}">
+		</form>
+	</div>
+</div>
+{% if appointmentdetails %}
+<script>
+	$(".update-appointment").hide();
+</script>
+{% endif %}
+{% if request.session.appointment_level_id != 1 %}
+<script>
+	$(".role-options").hide();
+</script>
+{% endif %}
+<!--container end-->
+{% endblock content %}

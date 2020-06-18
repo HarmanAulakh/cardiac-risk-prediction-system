@@ -1,0 +1,81 @@
+{% extends 'base.html' %} {% block content %}
+<script>
+	jQuery(function () {
+		jQuery("#files_start_date").datepicker({
+			changeMonth: true,
+			changeYear: true,
+			yearRange: "0:+1",
+			dateFormat: 'd MM,yy'
+		});
+		jQuery("#files_end_date").datepicker({
+			changeMonth: true,
+			changeYear: true,
+			yearRange: "0:+1",
+			dateFormat: 'd MM,yy'
+		});
+	});
+</script>
+<!--breadcrumbs start-->
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="">
+				<h1><center>{{heading}}</center></h1>
+			</div>
+		</div>
+	</div>
+</div>
+<!--breadcrumbs end-->
+
+<!--container start-->
+<div class="registration-bg">
+	<div class="row">
+		<form  enctype="multipart/form-data" method="post" class="form-signin wow fadeInUp" action="" style="max-width:40%;margin-left:440px;margin-right: 100px;">
+			{% csrf_token %}
+			<h2 class="form-signin-heading" style="margin-inline: 20px;">
+				{% if fn == "add" %}
+					<center>Add New Prediction File</center>
+				{% elif fn == "update" %}
+					Update Added Prediction File
+				{% endif %}
+			</h2>
+			{% if messages %}
+				<div class="alert alert-success fade in" style="margin:10px;">
+					{% for message in messages %}
+						<strong>{{ message }}</strong>
+					{% endfor %}
+				</div>
+			{% endif %}
+			<div class="login-wrap">
+				
+					<label for="pwd">Heart Dataset File Name</label>
+					<input type="text" value="{{filesDetails.files_name}}" name="files_name" id="files_name" class="form-inline" placeholder="Files Name" required>
+					<br>
+					<br>
+					<label for="pwd">Upload</label>
+					<input type="file" accept="*/*" class="form-inline" style="width: 300px;" placeholder="Heart File" autofocus="" name="files_file" id="files_file"
+					 value="{{filesDetails.files_file}}">
+					<br>
+					<br>
+					<label for="pwd">Dataset File information</label>
+					<textarea class="form-inline" style="height:150px;width:400px" placeholder="Description" autofocus="" name="files_desc" id="files_desc" required>{{filesDetails.files_desc}}</textarea>
+				</div>
+				<button class="btn btn-lg btn-login btn-block" type="submit">SAVE</button>
+			</div>
+			<input type="hidden" name="act" value="save_files">
+			<input type="hidden" name="user_id" value="{{fileslist.files_id}}">
+		</form
+	</div>
+</div>
+{% if appointmentdetails %}
+<script>
+	$(".update-appointment").hide();
+</script>
+{% endif %}
+{% if request.session.appointment_level_id != 1 %}
+<script>
+	$(".role-options").hide();
+</script>
+{% endif %}
+<!--container end-->
+{% endblock content %}

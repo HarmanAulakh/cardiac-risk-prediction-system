@@ -1,0 +1,93 @@
+{% extends 'base.html' %} {% block content %}
+<script>
+	jQuery(function () {
+		jQuery("#appointment_date").datepicker({
+			changeMonth: true,
+			changeYear: true,
+			yearRange: "0:+1",
+			dateFormat: 'd MM,yy'
+		});
+	});
+</script>
+<!--breadcrumbs start-->
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-sm-4">
+				<h1>{{heading}}</h1>
+			</div>
+		</div>
+	</div>
+</div>
+<!--breadcrumbs end-->
+
+<!--container start-->
+<div class="registration-bg">
+	<div class="row">
+		<form enctype="multipart/form-data" method="post" class="form-signin wow fadeInUp" action="" style="max-width:60%">
+			{% csrf_token %}
+			<h2 class="form-signin-heading">
+				{% if fn == "add" %}
+					Add New Topics
+				{% elif fn == "update" %}
+					Update Topics
+				{% endif %}
+			</h2>
+			{% if messages %}
+				<div class="alert alert-success fade in" style="margin:10px;">
+					{% for message in messages %}
+						<strong>{{ message }}</strong>
+					{% endfor %}
+				</div>
+			{% endif %}
+			<div class="login-wrap">
+			
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Select Course</label>
+					<select name="topics_course_id" required class="form-control" placeholder="Select Course" autofocus="" /> 
+					<option value="">Please Select</option>
+					{% for course in courseylist %}
+					<option value="{{ course.course_id }}" {% ifequal course.course_id topicsDetails.topics_course_id %} selected="selected"{% endifequal %}>{{course.course_name}}</option>
+					{% endfor %}
+					</select>
+				</div>
+
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Select Level</label>
+					<select name="topics_level_id" required class="form-control" placeholder="User Name" autofocus="" />
+					<option value="">Please Select</option>
+					{% for levels in levelslist %}
+						<option value="{{ levels.level_id }}" {% ifequal levels.level_id|stringformat:"s" topicsDetails.topics_level_id %} selected="selected"{% endifequal %}>{{levels.level_name}}</option>
+					{% endfor %}
+					</select>
+				</div>
+				
+				<div class="col-xs-6 form-group">
+					<label for="pwd">Topics Name</label>
+					<input type="text" value="{{topicsDetails.topics_name}}" name="topics_name" id="topics_name" class="form-control" placeholder="Topics Name" required>
+				</div>
+
+
+				<div class="col-xs-6 form-group" style="clear:both">
+					<label for="pwd">Prescriptions of the Topics</label>
+					<textarea class="form-control" style="height:150px;" placeholder="Description" autofocus="" name="topics_desc" id="topics_desc" required>{{topicsDetails.topics_desc}}</textarea>
+				</div>
+				<button class="btn btn-lg btn-login btn-block" type="submit">Submit</button>
+			</div>
+			<input type="hidden" name="act" value="save_topics">
+			<input type="hidden" name="user_id" value="{{topicslist.topics_id}}">
+		</form>
+	</div>
+</div>
+{% if appointmentdetails %}
+<script>
+	$(".update-appointment").hide();
+</script>
+{% endif %}
+{% if request.session.appointment_level_id != 1 %}
+<script>
+	$(".role-options").hide();
+</script>
+{% endif %}
+<!--container end-->
+{% endblock content %}
